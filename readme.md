@@ -11,7 +11,7 @@ It's quite simple. You can create your project in any desired folder using the f
 ```shell
 git clone https://github.com/erayzesen/kirpi_app_template.git your_project_name
 ```
-If you haven't installed the Kirpi package yet, this command will also install **kirpi**, which is a dependency of the template:  
+If you haven't installed the **kirpi** package yet, this command will also install **kirpi**, which is a dependency of the template:  
 ```shell
 #In your project folder
 nimble install --depsOnly
@@ -19,7 +19,7 @@ nimble install --depsOnly
 
 # Project Structure
 
-The project structure is quite simple. The `src/game.nim` file is the main file that opens your window and passes your callback functions. (You can rename it if you want; the important thing is where you call the `run` command that starts the Kirpi application.)  
+The project structure is quite simple. The `src/game.nim` file is the main file that opens your window and passes your callback functions. (You can rename it if you want; the important thing is where you call the `run` command that starts the **kirpi** application.)  
 
 You should keep your game code and assets under the `src` folder. When you build the project, a folder named `releases` will be created in the root directory, and the build outputs will be placed under platform-specific subfolders inside `releases`.  
 
