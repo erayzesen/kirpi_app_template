@@ -62,6 +62,9 @@ task setupBuildEnv, "Set up Android SDK and NDK for development":
   # Verify the integrity of the downloaded file
   verifySha256(CommandLineToolsZip, CommandLineToolsSha256)
   # Extract the tools to the specified Android home directory
+  if not dirExists(AndroidHome): 
+    mkDir(AndroidHome)
+    echo "Created Android SDK directory at: " & AndroidHome
   myExec "unzip -q " & CommandLineToolsZip & " -d " & AndroidHome, input = "A"
   let sdkmanagerPath = AndroidHome / "cmdline-tools/bin" / "sdkmanager".toBat
   # Accept SDK licenses automatically
@@ -93,7 +96,27 @@ task setupBuildEnv, "Set up Android SDK and NDK for development":
     rmDir tempDir
   else: myExec "unzip -q " & AndroidNdkZip, input = "A"
   # AndroidNdkZip[0..<rfind(AndroidNdkZip, '-')]
+  if not dirExists(AndroidNdk):
+    mkDir(AndroidNdk)
+    echo "Created Android NDK directory at: " & AndroidNdk
+  
+  
+  
   mvDir(thisDir() / "android-ndk-r27c", AndroidNdk)
+
+  #NDK Permissions
+  when defined(linux):
+    echo "Setting execute permissions for NDK tools..."
+    
+    let ndkBinPath = AndroidNdk / "toolchains/llvm/prebuilt/linux-x86_64/bin"  
+    
+    if dirExists(ndkBinPath):
+      # chmod +x permission command 
+      myExec &"chmod -R +x {ndkBinPath}" 
+      echo "NDK execute permissions set successfully."
+    else:
+      # Give a warning message
+      echo "Warning: NDK binary directory not found at: " & ndkBinPath
   # Set up environment variables
   when defined(GitHubCI):
     appendToGithubFile("GITHUB_ENV", {"ANDROID_HOME": AndroidHome, "ANDROID_NDK": AndroidNdk})

@@ -36,20 +36,50 @@ const
 
 # Required path variables
 const
-  JavaHome = getEnv"JAVA_HOME"
-  AndroidNdk = when defined(GitHubCI): getEnv"GITHUB_WORKSPACE" / "android-ndk" else: getEnv"ANDROID_NDK"
-  AndroidHome = when defined(GitHubCI): getEnv"GITHUB_WORKSPACE" / "android-sdk" else: getEnv"ANDROID_HOME"
+  DefaultAndroidHomePath = getHomeDir() / "Android" / "sdk"
+  DefaultAndroidNDKPath = getHomeDir() / "Android" / "ndk"
+  DefaultJavaHome = (proc(): string =
+    let javaPath = gorge("readlink -f $(which java)")
+    
+    if javaPath.len > 0:
+      # Removing '/bin/java' 
+      # For example: /usr/lib/jvm/java-17-openjdk-amd64/bin/java -> /usr/lib/jvm/java-17-openjdk-amd64
+      result = parentDir(parentDir(javaPath.strip))
+      
+      # Check dir
+      if not dirExists(result):
+        result = ""
+    else:
+      result = ""
+  )()
+  EnvJavaHome=getEnv("JAVA_HOME")
+  JavaHome = 
+    if EnvJavaHome.len > 0: 
+      EnvJavaHome 
+    else: 
+      DefaultJavaHome
+  AndroidNdk = when defined(GitHubCI): getEnv"GITHUB_WORKSPACE" / "android-ndk" 
+                else: 
+                  let envVal = getEnv("ANDROID_NDK")
+                  if envVal.len > 0: envVal else: DefaultAndroidHomePath
+  AndroidHome = when defined(GitHubCI): getEnv"GITHUB_WORKSPACE" / "android-sdk" 
+                else:
+                  let envVal = getEnv("ANDROID_HOME")
+                  if envVal.len > 0: envVal else: DefaultAndroidHomePath
   AndroidBuildTools = AndroidHome / "build-tools/34.0.0"
   AndroidPlatformTools = AndroidHome / "platform-tools"
 
+
+
 # Android project configuration variables
 const
-  ProjectName = "raylib_game"
+  ProjectName = "kirpi_game"
   ProjectLibraryName = "main"
   ProjectBuildId = "android"
-  ProjectBuildPath = ProjectBuildId & "." & ProjectName
+  ProjectAndroidMainPath="releases/android/"
+  ProjectBuildPath = ProjectAndroidMainPath & ProjectBuildId & "." & ProjectName
   ProjectResourcesPath = "src/resources"
-  ProjectSourceFile = "src/raylib_game.nim"
+  ProjectSourceFile = "src/game.nim"
 
 # Android app configuration variables
 const
@@ -58,9 +88,9 @@ const
   AppProductName = "rgame"
   AppVersionCode = 1
   AppVersionName = "1.0"
-  AppIconLdpi = "logo/raylib_36x36.png"
-  AppIconMdpi = "logo/raylib_48x48.png"
-  AppIconHdpi = "logo/raylib_72x72.png"
+  AppIconLdpi = "logo/logo_36x36.png"
+  AppIconMdpi = "logo/logo_48x48.png"
+  AppIconHdpi = "logo/logo_72x72.png"
   AppScreenOrientation = landscape
   AppKeystorePass = "raylib"
 
@@ -169,7 +199,8 @@ task buildAndroid, "Compile and package raylib project for Android":
   exec(AndroidBuildTools / (when defined(windows): "apksigner.bat" else: "apksigner") &
       " sign --ks " & ProjectBuildPath / (ProjectName & ".keystore") &
       " --ks-pass pass:" & AppKeystorePass & " --key-pass pass:" & AppKeystorePass &
-      " --out " & ProjectName & ".apk" & " --ks-key-alias " & ProjectName & "Key" & " " & alignedApkPath)
+      " --out " & ProjectAndroidMainPath & ProjectName & ".apk" & " --ks-key-alias " & ProjectName & "Key" & " " & alignedApkPath)
+  
 
 task info, "Retrieve device compatibility information":
   # Check supported ABI for the device (armeabi-v7a, arm64-v8a, x86, x86_64)
@@ -186,5 +217,5 @@ task logcat, "Display raylib-specific logs from the Android device":
 
 task deploy, "Install and monitor raylib project on Android device/emulator":
   # Install and monitorize {ProjectName}.apk to default emulator/device
-  exec(AndroidPlatformTools / "adb install " & ProjectName & ".apk")
+  exec(AndroidPlatformTools / "adb install " & ProjectAndroidMainPath & ProjectName & ".apk")
   logcatTask()
