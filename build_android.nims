@@ -47,7 +47,7 @@ const
       result = parentDir(parentDir(javaPath.strip))
       
       # Check dir
-      if not dirExists(result):
+      if dirExists(result)==false:
         result = ""
     else:
       result = ""
