@@ -1,7 +1,7 @@
 # Package
 version       = "1.0.0"
 author        = "Author"
-description   = "kirpi game template"
+description   = "your kirpi project description"
 license       = "License"
 srcDir        = "src"
 bin           = @["game"]
