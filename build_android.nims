@@ -47,7 +47,7 @@ const
       result = parentDir(parentDir(javaPath.strip))
       
       # Check dir
-      if dirExists(result)==false:
+      if nimScript.dirExists(result)==false:
         result = ""
     else:
       result = ""
