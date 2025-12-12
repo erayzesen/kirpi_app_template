@@ -7,10 +7,12 @@ First, you should [install Nim](https://nim-lang.org/install.html) on your platf
 If you are using [VS Code](https://code.visualstudio.com/), you can install [this extension](https://marketplace.visualstudio.com/items?itemName=NimLang.nimlang) to start developing with Nim.
 
 # How to Use the Template
-It's quite simple. You can create your project in any desired folder using the following command:  
+It's quite simple. Click the ***Use This Template*** button in the top-right corner (or fork the repository). Then navigate to the folder where you want your project to be created and clone it using the command below.
 ```shell
-git clone https://github.com/erayzesen/kirpi_app_template.git your_project_name
+git clone your_template_git_repo your_project_name
 ```
+Alternatively, you can download this repository directly without using Git and start your project right away.
+
 If you haven't installed the **kirpi** package yet, this command will also install **kirpi**, which is a dependency of the template:  
 ```shell
 #In your project folder
