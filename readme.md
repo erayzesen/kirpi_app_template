@@ -38,6 +38,13 @@ You can compile & run your project for your current desktop platform with a sing
 ```shell
 nim c -r src/game.nim
 ```
+When your project is finished and you're ready to publish it, don't forget to use the following command to enable performance optimizations and compile in release mode instead of debug. 
+
+```shell
+nim c -r -d:release --opt:speed src/game.nim
+```
+
+
 
 ## For Web (WebAssembly)
 * Install the Emscripten SDK. Follow the official [Emscripten installation guide](https://emscripten.org/docs/getting_started/downloads.html).
