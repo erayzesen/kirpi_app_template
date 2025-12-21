@@ -78,7 +78,13 @@ elif defined(emscripten):
   # Set the stack size to 5MB to prevent 'memory access out of bounds' 
   # especially in release builds where optimization may increase stack usage.
   --passL:"-sSTACK_SIZE=5MB"
-  
+
+  # Allow the heap to grow dynamically if the game needs more memory for assets.
+  --passL:"-sALLOW_MEMORY_GROWTH=1"
+
+  # Ensure the initial memory is large enough for a typical game (e.g., 32MB or 64MB).
+  --passL:"-sINITIAL_MEMORY=33554432" # 32 MB
+
   # --mm:orc
   --threads:off
   --panics:on
