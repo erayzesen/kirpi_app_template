@@ -75,6 +75,10 @@ elif defined(emscripten):
     --clang.cpp.exe:emcc
     --clang.cpp.linkerexe:emcc
 
+  # Set the stack size to 5MB to prevent 'memory access out of bounds' 
+  # especially in release builds where optimization may increase stack usage.
+  --passL:"-sSTACK_SIZE=5MB"
+  
   # --mm:orc
   --threads:off
   --panics:on
