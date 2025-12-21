@@ -75,8 +75,9 @@ elif defined(emscripten):
     --clang.cpp.exe:emcc
     --clang.cpp.linkerexe:emcc
 
-  # Set the stack size to 5MB to prevent 'memory access out of bounds' 
-  # especially in release builds where optimization may increase stack usage.
+  # Set the stack size to 5MB to prevent 'memory access out of bounds' errors.
+  # This often happens in release builds due to aggressive optimizations.
+  # If you still encounter memory access errors, feel free to increase this value.
   --passL:"-sSTACK_SIZE=5MB"
 
   # Allow the heap to grow dynamically if the game needs more memory for assets.
