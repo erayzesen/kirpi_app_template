@@ -1,8 +1,6 @@
-
 import kirpi
 
 proc load() =
-  
   discard
 
 proc update( dt:float) =
