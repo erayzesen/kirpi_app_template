@@ -4,9 +4,9 @@ let projectPathName=projectName()
 
 proc createDirAll(file:string) =
     when defined(windows):
-        exec "mkdir releases\\windows"
+        mkdir("releases/windows")
     elif defined(linux) or defined(macosx):
-        exec "mkdir -p releases/linux"
+        mkdir("releases/linux")
 
 const AndroidApiVersion {.intdefine.} = 33
 const AndroidNdk {.strdefine.} = "/opt/android-ndk"
