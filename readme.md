@@ -53,6 +53,14 @@ nim c -r -d:release --opt:speed src/game.nim
 nim c -d:emscripten src/game.nim
 ```
 
+When your project is finished and you're ready to publish it, don't forget to use the following command to enable performance optimizations and compile in release mode instead of debug. 
+
+```shell
+nim c -d:emscripten -d:release --opt:speed  src/game.nim
+```
+
+
+
 ## For Android
 * Make sure to install Java JDK and `wget`, then run the following Nimble tasks in order:  
 ```
